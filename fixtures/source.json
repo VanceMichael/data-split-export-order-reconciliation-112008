@@ -1,0 +1,686 @@
+{
+  "steps": [
+    "sale",
+    "boxed",
+    "split",
+    "partial-refund",
+    "late-proof",
+    "replacement"
+  ],
+  "routes": {
+    "common": {
+      "GET /shops/kits": {
+        "status": 200,
+        "body": [
+          {
+            "kit": "LOCK",
+            "version": "3",
+            "parts": [
+              {
+                "sku": "BODY",
+                "weight": 1
+              },
+              {
+                "sku": "KEY",
+                "weight": 1
+              },
+              {
+                "sku": "PLATE",
+                "weight": 1
+              }
+            ]
+          }
+        ]
+      },
+      "GET /shops/orders?account=west": {
+        "status": 200,
+        "body": [
+          {
+            "account": "west",
+            "order": "O32",
+            "currency": "USD",
+            "items": [
+              {
+                "line": "1",
+                "kit": "LOCK",
+                "version": "3",
+                "minorAmount": 1000,
+                "count": 1
+              },
+              {
+                "line": "2",
+                "sku": "HOOK",
+                "minorAmount": 820,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      "GET /shops/orders?account=south": {
+        "status": 200,
+        "body": [
+          {
+            "account": "south",
+            "order": "O32",
+            "currency": "EUR",
+            "items": [
+              {
+                "line": "1",
+                "kit": "LOCK",
+                "version": "3",
+                "minorAmount": 2200,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      "GET /warehouse/manifest?page=1": {
+        "status": 200,
+        "body": {
+          "entries": [
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "BODY",
+              "pack": "B1-0"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "KEY",
+              "pack": "B1-0"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "PLATE",
+              "pack": "B2-0"
+            }
+          ],
+          "next": "/warehouse/manifest?page=2"
+        }
+      },
+      "GET /warehouse/manifest?page=2": {
+        "status": 200,
+        "body": {
+          "entries": [
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "2",
+              "sku": "HOOK",
+              "pack": "B3-0"
+            },
+            {
+              "account": "south",
+              "order": "O32",
+              "line": "1",
+              "sku": "BODY",
+              "pack": "B4-0"
+            },
+            {
+              "account": "south",
+              "order": "O32",
+              "line": "1",
+              "sku": "KEY",
+              "pack": "B4-0"
+            },
+            {
+              "account": "south",
+              "order": "O32",
+              "line": "1",
+              "sku": "PLATE",
+              "pack": "B4-0"
+            }
+          ],
+          "next": null
+        }
+      },
+      "GET /warehouse/closeouts": {
+        "status": 200,
+        "body": [
+          {
+            "pack": "B1-0",
+            "tag": "KA1",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B2-0",
+            "tag": "KA2",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B3-0",
+            "tag": "KA3",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B4-0",
+            "tag": "KA4",
+            "operation": "seal",
+            "at": "10:00:00"
+          }
+        ]
+      },
+      "GET /forwarder/handover": {
+        "status": 200,
+        "body": []
+      }
+    },
+    "sale": {},
+    "boxed": {
+      "GET /warehouse/manifest?page=2": {
+        "status": 200,
+        "body": {
+          "blank": true,
+          "entries": [],
+          "next": null
+        }
+      }
+    },
+    "split": {
+      "GET /warehouse/manifest?page=1": {
+        "status": 200,
+        "body": {
+          "entries": [
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "BODY",
+              "pack": "B1-1"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "KEY",
+              "pack": "B5-0"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "PLATE",
+              "pack": "B2-0"
+            }
+          ],
+          "next": "/warehouse/manifest?page=2"
+        }
+      },
+      "GET /warehouse/closeouts": {
+        "status": 200,
+        "body": [
+          {
+            "pack": "B1-0",
+            "tag": "KA1",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B2-0",
+            "tag": "KA2",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B3-0",
+            "tag": "KA3",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B4-0",
+            "tag": "KA4",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B1-1",
+            "tag": "KA6",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          },
+          {
+            "pack": "B5-0",
+            "tag": "KA7",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          }
+        ]
+      }
+    },
+    "partial-refund": {
+      "GET /shops/orders?account=west": {
+        "status": 200,
+        "body": [
+          {
+            "account": "west",
+            "order": "O32",
+            "currency": "USD",
+            "items": [
+              {
+                "line": "1",
+                "kit": "LOCK",
+                "version": "3",
+                "minorAmount": 1000,
+                "count": 1
+              },
+              {
+                "line": "2",
+                "sku": "HOOK",
+                "minorAmount": 820,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "refund": "R1",
+            "line": "1",
+            "sku": "KEY",
+            "count": 1,
+            "minorAmount": 125
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "refund": "R2",
+            "line": "1",
+            "count": 1,
+            "minorAmount": 63
+          }
+        ]
+      },
+      "GET /warehouse/manifest?page=1": {
+        "status": 200,
+        "body": {
+          "entries": [
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "BODY",
+              "pack": "B1-1"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "KEY",
+              "pack": "B5-0"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "PLATE",
+              "pack": "B2-0"
+            }
+          ],
+          "next": "/warehouse/manifest?page=2"
+        }
+      },
+      "GET /warehouse/closeouts": {
+        "status": 200,
+        "body": [
+          {
+            "pack": "B1-0",
+            "tag": "KA1",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B2-0",
+            "tag": "KA2",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B3-0",
+            "tag": "KA3",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B4-0",
+            "tag": "KA4",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B1-1",
+            "tag": "KA6",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          },
+          {
+            "pack": "B5-0",
+            "tag": "KA7",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          }
+        ]
+      }
+    },
+    "late-proof": {
+      "GET /shops/orders?account=west": {
+        "status": 200,
+        "body": [
+          {
+            "account": "west",
+            "order": "O32",
+            "currency": "USD",
+            "items": [
+              {
+                "line": "1",
+                "kit": "LOCK",
+                "version": "3",
+                "minorAmount": 1000,
+                "count": 1
+              },
+              {
+                "line": "2",
+                "sku": "HOOK",
+                "minorAmount": 820,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "refund": "R1",
+            "line": "1",
+            "sku": "KEY",
+            "count": 1,
+            "minorAmount": 125
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "refund": "R2",
+            "line": "1",
+            "count": 1,
+            "minorAmount": 63
+          }
+        ]
+      },
+      "GET /warehouse/manifest?page=1": {
+        "status": 200,
+        "body": {
+          "entries": [
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "BODY",
+              "pack": "B1-1"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "KEY",
+              "pack": "B5-0"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "PLATE",
+              "pack": "B2-0"
+            }
+          ],
+          "next": "/warehouse/manifest?page=2"
+        }
+      },
+      "GET /warehouse/closeouts": {
+        "status": 200,
+        "body": [
+          {
+            "pack": "B1-0",
+            "tag": "KA1",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B2-0",
+            "tag": "KA2",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B3-0",
+            "tag": "KA3",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B4-0",
+            "tag": "KA4",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B1-1",
+            "tag": "KA6",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          },
+          {
+            "pack": "B5-0",
+            "tag": "KA7",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          }
+        ]
+      },
+      "GET /forwarder/handover": {
+        "status": 200,
+        "body": [
+          {
+            "receipt": "H9",
+            "pack": "B1-0",
+            "tag": "KA1",
+            "at": "10:15:00",
+            "receivedAt": "11:02:00",
+            "accepted": true
+          },
+          {
+            "receipt": "H10",
+            "pack": "B5-0",
+            "tag": "KA7",
+            "at": "11:05:00",
+            "receivedAt": "11:06:00",
+            "accepted": false,
+            "reason": "实物已在前件"
+          }
+        ]
+      }
+    },
+    "replacement": {
+      "GET /shops/orders?account=west": {
+        "status": 200,
+        "body": [
+          {
+            "account": "west",
+            "order": "O32",
+            "currency": "USD",
+            "items": [
+              {
+                "line": "1",
+                "kit": "LOCK",
+                "version": "3",
+                "minorAmount": 1000,
+                "count": 1
+              },
+              {
+                "line": "2",
+                "sku": "HOOK",
+                "minorAmount": 820,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "refund": "R1",
+            "line": "1",
+            "sku": "KEY",
+            "count": 1,
+            "minorAmount": 125
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "refund": "R2",
+            "line": "1",
+            "count": 1,
+            "minorAmount": 63
+          },
+          {
+            "account": "west",
+            "order": "O32",
+            "orderChange": "C7",
+            "line": "1",
+            "sku": "PLATE",
+            "replaceWith": "PLATE-2"
+          }
+        ]
+      },
+      "GET /warehouse/manifest?page=1": {
+        "status": 200,
+        "body": {
+          "entries": [
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "BODY",
+              "pack": "B1-1"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "KEY",
+              "pack": "B5-0"
+            },
+            {
+              "account": "west",
+              "order": "O32",
+              "line": "1",
+              "sku": "PLATE-2",
+              "pack": "B2-0"
+            }
+          ],
+          "next": "/warehouse/manifest?page=2"
+        }
+      },
+      "GET /warehouse/closeouts": {
+        "status": 200,
+        "body": [
+          {
+            "pack": "B1-0",
+            "tag": "KA1",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B2-0",
+            "tag": "KA2",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B3-0",
+            "tag": "KA3",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B4-0",
+            "tag": "KA4",
+            "operation": "seal",
+            "at": "10:00:00"
+          },
+          {
+            "pack": "B1-1",
+            "tag": "KA6",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          },
+          {
+            "pack": "B5-0",
+            "tag": "KA7",
+            "from": [
+              "B1-0"
+            ],
+            "operation": "split",
+            "at": "10:20:00"
+          },
+          {
+            "pack": "B3-0",
+            "operation": "clear",
+            "cleared": true,
+            "at": "11:15:00"
+          }
+        ]
+      },
+      "GET /forwarder/handover": {
+        "status": 200,
+        "body": [
+          {
+            "receipt": "H9",
+            "pack": "B1-0",
+            "tag": "KA1",
+            "at": "10:15:00",
+            "receivedAt": "11:02:00",
+            "accepted": true
+          },
+          {
+            "receipt": "H10",
+            "pack": "B5-0",
+            "tag": "KA7",
+            "at": "11:05:00",
+            "receivedAt": "11:06:00",
+            "accepted": false,
+            "reason": "实物已在前件"
+          }
+        ]
+      }
+    }
+  }
+}

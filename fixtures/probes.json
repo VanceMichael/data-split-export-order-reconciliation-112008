@@ -1,0 +1,46 @@
+[
+  {
+    "step": "sale",
+    "path": "/shops/orders?account=south",
+    "field": [
+      0,
+      "currency"
+    ],
+    "value": "EUR"
+  },
+  {
+    "step": "boxed",
+    "path": "/warehouse/manifest?page=2",
+    "field": [
+      "blank"
+    ],
+    "value": true
+  },
+  {
+    "step": "partial-refund",
+    "path": "/shops/orders?account=west",
+    "field": [
+      1,
+      "sku"
+    ],
+    "value": "KEY"
+  },
+  {
+    "step": "late-proof",
+    "path": "/forwarder/handover",
+    "field": [
+      0,
+      "pack"
+    ],
+    "value": "B1-0"
+  },
+  {
+    "step": "replacement",
+    "path": "/warehouse/closeouts",
+    "field": [
+      6,
+      "cleared"
+    ],
+    "value": true
+  }
+]
