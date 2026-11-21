@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node sources/source.mjs",
+    "start:review": "node src/server.mjs",
     "test": "node --test"
   }
 }
